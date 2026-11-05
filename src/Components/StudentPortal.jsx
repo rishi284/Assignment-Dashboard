@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import axios from 'axios'
 import toast from 'react-hot-toast'
+const API_URL = import.meta.env.VITE_API_URL
 
 function StudentDashboard() {
 
@@ -30,7 +31,7 @@ function StudentDashboard() {
         }
 
         // GET request - Fetch all assignments
-        axios.get('http://localhost:3000/assignments')
+        axios.get(`${API_URL}/assignments`)
 
             .then((assignmentResponse) => {
 
@@ -40,7 +41,7 @@ function StudentDashboard() {
                 )
 
                 // GET request - Fetch current student's submissions
-                axios.get('http://localhost:3000/submissions', {
+                axios.get(`${API_URL}/submissions`, {
                     params: {
                         studentId: currentUser.id
                     }
@@ -146,14 +147,8 @@ function StudentDashboard() {
 
         // Check whether a submission record already exists
         const request = selectedAssignment.submissionId
-            ? axios.patch(
-                `http://localhost:3000/submissions/${selectedAssignment.submissionId}`,
-                submissionData
-            )
-            : axios.post(
-                'http://localhost:3000/submissions',
-                submissionData
-            )
+            ? axios.patch(`${API_URL}/submissions/${selectedAssignment.submissionId}`, submissionData)
+            : axios.post(`${API_URL}/submissions`, submissionData)
 
         request
 
@@ -257,7 +252,7 @@ function StudentDashboard() {
                         onClick={handleLogout}
                         className="w-full text-white text-center bg-rose-500 py-3 rounded-xl cursor-pointer"
                     >
-                         Logout
+                        Logout
                     </button>
 
                 </div>

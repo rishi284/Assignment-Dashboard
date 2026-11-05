@@ -55,6 +55,13 @@
       "email": "abcd",
       "password": "abcd",
       "role": "Student"
+    },
+    {
+      "id": "student_1793891039037",
+      "name": "wsxz",
+      "email": "wsxz",
+      "password": "wsxz",
+      "role": "Student"
     }
   ],
   "admins": [
@@ -94,24 +101,6 @@
       "role": "Admin"
     }
   ],
-  "assignments": [
-    {
-      "title": "react",
-      "description": "",
-      "dueDate": "2026-11-09",
-      "driveLink": "https://drive.google.com/drive/home",
-      "createdBy": "admin_1793804769319",
-      "assignedTo": "all",
-      "id": 3
-    }
-  ],
-  "submissions": [
-    {
-      "assignmentId": 3,
-      "studentId": "student_1793885862161",
-      "status": "Submitted",
-      "submittedAt": "2026-11-05T13:39:15.239Z",
-      "id": 1
-    }
-  ]
+  "assignments": [],
+  "submissions": []
 }

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import axios from 'axios'
 import toast from 'react-hot-toast'
+const API_URL = import.meta.env.VITE_API_URL
 
 function AdminDashboard() {
 
@@ -47,9 +48,9 @@ function AdminDashboard() {
         }
 
         Promise.all([
-            axios.get('http://localhost:3000/assignments'),
-            axios.get('http://localhost:3000/students'),
-            axios.get('http://localhost:3000/submissions')
+            axios.get(`${API_URL}/assignments`),
+            axios.get(`${API_URL}/students`),
+            axios.get(`${API_URL}/submissions`)
         ])
 
             .then(([assignmentResponse, studentResponse, submissionResponse]) => {
@@ -220,7 +221,7 @@ function AdminDashboard() {
 
 
         // POST request - Create assignment
-        axios.post('http://localhost:3000/assignments', newAssignment)
+        axios.post(`${API_URL}/assignments`, newAssignment)
 
             .then((response) => {
 
@@ -288,15 +289,12 @@ function AdminDashboard() {
 
         setSaving(true)
 
-        axios.patch(
-            `http://localhost:3000/assignments/${editingAssignmentId}`,
-            {
-                title: title.trim(),
-                description: description.trim(),
-                dueDate,
-                driveLink: driveLink.trim()
-            }
-        )
+        axios.patch(`${API_URL}/assignments/${editingAssignmentId}`, {
+            title: title.trim(),
+            description: description.trim(),
+            dueDate,
+            driveLink: driveLink.trim()
+        })
             .then((response) => {
 
                 setAssignments((previousAssignments) =>
@@ -342,9 +340,7 @@ function AdminDashboard() {
             loading: true
         }))
 
-        axios.delete(
-            `http://localhost:3000/assignments/${deleteModal.id}`
-        )
+        axios.delete(`${API_URL}/assignments/${deleteModal.id}`)
             .then(() => {
 
                 setAssignments((previousAssignments) =>
