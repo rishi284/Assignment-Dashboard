@@ -1,0 +1,126 @@
+{
+  "students": [
+    {
+      "id": "student_1793804720549",
+      "name": "asdf",
+      "email": "asdf",
+      "password": "asdfg",
+      "role": "Student"
+    },
+    {
+      "id": "student_1793805189201",
+      "name": "qwer",
+      "email": "qwer",
+      "password": "qwer",
+      "role": "Student"
+    },
+    {
+      "id": "student_1793807005601",
+      "name": "asxd",
+      "email": "asxd",
+      "password": "azsx",
+      "role": "Student"
+    },
+    {
+      "id": "student_1793807014488",
+      "name": "asdc",
+      "email": "asdc",
+      "password": "azxs",
+      "role": "Student"
+    },
+    {
+      "id": "student_1793808348116",
+      "name": "qwerty",
+      "email": "qwerty",
+      "password": "qwerty",
+      "role": "Student"
+    },
+    {
+      "id": "student_1793873026744",
+      "name": "qazx",
+      "email": "qazx",
+      "password": "qazx",
+      "role": "Student"
+    },
+    {
+      "id": "student_1793874625706",
+      "name": "zxcvwe",
+      "email": "zxcvwe",
+      "password": "zxcvqwer",
+      "role": "Student"
+    }
+  ],
+  "admins": [
+    {
+      "id": "admin_1793804769319",
+      "name": "zxcv",
+      "email": "zxcv",
+      "password": "vbnm",
+      "role": "Admin"
+    },
+    {
+      "id": "admin_1793807245639",
+      "name": "asdfr",
+      "email": "asdfr",
+      "password": "asdfr",
+      "role": "Admin"
+    },
+    {
+      "id": "admin_1793808388746",
+      "name": "admin 1",
+      "email": "admin 1",
+      "password": "admin 1",
+      "role": "Admin"
+    },
+    {
+      "id": "student_1793875099211",
+      "name": "admin1",
+      "email": "admin1",
+      "password": "admin1",
+      "role": "Admin"
+    }
+  ],
+  "assignments": [
+    {
+      "title": "React assignment",
+      "description": "asdfghjk",
+      "dueDate": "2026-11-06",
+      "driveLink": "https://drive.google.com/drive/home",
+      "createdBy": "admin_1793804769319",
+      "assignedTo": "all",
+      "id": 1
+    },
+    {
+      "title": "PYTHON",
+      "description": "",
+      "dueDate": "2026-11-07",
+      "driveLink": "asdf",
+      "createdBy": "admin_1793804769319",
+      "assignedTo": "all",
+      "id": 2
+    }
+  ],
+  "submissions": [
+    {
+      "assignmentId": 1,
+      "studentId": "student_1793805189201",
+      "status": "Submitted",
+      "submittedAt": "2026-11-05T10:47:50.233Z",
+      "id": 1
+    },
+    {
+      "assignmentId": 1,
+      "studentId": "student_1793804720549",
+      "status": "Submitted",
+      "submittedAt": "2026-11-05T11:04:03.241Z",
+      "id": 2
+    },
+    {
+      "assignmentId": 1,
+      "studentId": "student_1793873026744",
+      "status": "Submitted",
+      "submittedAt": "2026-11-05T11:09:53.049Z",
+      "id": 3
+    }
+  ]
+}
