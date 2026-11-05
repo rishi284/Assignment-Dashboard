@@ -18,7 +18,7 @@ function Login() {
         const enteredPassword = password.trim()
 
         if (!enteredEmail) {
-            toast.error('Please enter email')
+            toast.error('Please enter email or username')
             return
         }
         else if (!enteredPassword) {
@@ -177,11 +177,9 @@ function Login() {
 
                     <div className="w-full max-w-md mx-auto">
 
-                        <h1 className="text-3xl font-semibold text-zinc-700">
-                            Welcome to Joineazy!
-                        </h1>
+                       
 
-                        <p className="text-sm text-gray-400 mt-2 mb-9">
+                        <p className="text-lg text-gray-400 mt-2 mb-9">
                             Sign in to continue to your account
                         </p>
 
