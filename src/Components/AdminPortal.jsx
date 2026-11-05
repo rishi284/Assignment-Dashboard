@@ -23,6 +23,11 @@ function AdminDashboard() {
 
     // Create assignment modal
     const [showCreateModal, setShowCreateModal] = useState(false)
+    const [editingAssignmentId, setEditingAssignmentId] = useState(null)
+    const [deleteModal, setDeleteModal] = useState({
+        id: null,
+        loading: false
+    })
 
     // Assignment form
     const [assignmentForm, setAssignmentForm] = useState({
@@ -166,6 +171,8 @@ function AdminDashboard() {
             driveLink: '',
         })
 
+        setEditingAssignmentId(null)
+
     }
 
 
@@ -240,6 +247,129 @@ function AdminDashboard() {
                 toast.error('Unable to create assignment')
 
                 setSaving(false)
+
+            })
+    }
+
+    // Edit assignment
+    const handleEditAssignment = (item) => {
+        setEditingAssignmentId(item.id)
+
+        setAssignmentForm({
+            title: item.title,
+            description: item.description,
+            dueDate: item.dueDate,
+            driveLink: item.driveLink,
+        })
+
+        setShowCreateModal(true)
+    }
+
+    // Update assignment
+    const handleUpdateAssignment = () => {
+
+        const { title, description, dueDate, driveLink } = assignmentForm
+
+        if (!title.trim()) {
+            toast.error('Please enter assignment title')
+            return
+        }
+
+
+        if (!dueDate) {
+            toast.error('Please select due date')
+            return
+        }
+
+        if (!driveLink.trim()) {
+            toast.error('Please enter Drive link')
+            return
+        }
+
+        setSaving(true)
+
+        axios.patch(
+            `http://localhost:3000/assignments/${editingAssignmentId}`,
+            {
+                title: title.trim(),
+                description: description.trim(),
+                dueDate,
+                driveLink: driveLink.trim()
+            }
+        )
+            .then((response) => {
+
+                setAssignments((previousAssignments) =>
+                    previousAssignments.map((item) =>
+                        String(item.id) === String(editingAssignmentId)
+                            ? response.data
+                            : item
+                    )
+                )
+
+                resetAssignmentForm()
+                setShowCreateModal(false)
+                setSaving(false)
+
+                toast.success('Assignment updated successfully!')
+
+            })
+            .catch((error) => {
+
+                console.error('Update assignment error:', error)
+                toast.error('Unable to update assignment')
+                setSaving(false)
+
+            })
+    }
+
+    // Delete assignment
+    // Open delete confirmation popup
+    const handleDeleteAssignment = (assignmentId) => {
+        setDeleteModal({
+            id: assignmentId,
+            loading: false
+        })
+    }
+
+    // Confirm assignment deletion
+    const handleConfirmDelete = () => {
+
+        if (deleteModal.id === null) return
+
+        setDeleteModal((previous) => ({
+            ...previous,
+            loading: true
+        }))
+
+        axios.delete(
+            `http://localhost:3000/assignments/${deleteModal.id}`
+        )
+            .then(() => {
+
+                setAssignments((previousAssignments) =>
+                    previousAssignments.filter(
+                        (item) => String(item.id) !== String(deleteModal.id)
+                    )
+                )
+
+                setDeleteModal({
+                    id: null,
+                    loading: false
+                })
+
+                toast.success('Assignment deleted successfully!')
+
+            })
+            .catch((error) => {
+
+                console.error('Delete assignment error:', error)
+                toast.error('Unable to delete assignment')
+
+                setDeleteModal((previous) => ({
+                    ...previous,
+                    loading: false
+                }))
 
             })
     }
@@ -326,7 +456,7 @@ function AdminDashboard() {
                         onClick={handleLogout}
                         className="w-full text-center text-white bg-rose-500  py-3 rounded-xl  cursor-pointer"
                     >
-                         Logout
+                        Logout
                     </button>
 
                 </div>
@@ -501,9 +631,31 @@ function AdminDashboard() {
                                         className="bg-white p-6 rounded-2xl shadow-sm border border-zinc-100 hover:shadow-md transition-all duration-300"
                                     >
 
-                                        <h3 className="text-lg font-semibold text-zinc-800">
-                                            {item.title}
-                                        </h3>
+                                        <div className="flex justify-between items-center gap-3 flex-wrap">
+
+                                            <h3 className="text-lg font-semibold text-zinc-800">
+                                                {item.title}
+                                            </h3>
+
+                                            <div className="flex gap-2 *:cursor-pointer">
+
+                                                <button
+                                                    onClick={() => handleEditAssignment(item)}
+                                                    className="px-3 py-1.5 text-sm text-[#7938EB] bg-purple-50 rounded-lg hover:bg-purple-100"
+                                                >
+                                                    Edit
+                                                </button>
+
+                                                <button
+                                                    onClick={() => handleDeleteAssignment(item.id)}
+                                                    className="px-3 py-1.5 text-sm text-red-500 bg-red-50 rounded-lg hover:bg-red-100"
+                                                >
+                                                    Delete
+                                                </button>
+
+                                            </div>
+
+                                        </div>
 
                                         <p className="text-sm text-zinc-500 leading-6 mt-3 mb-5">
                                             {item.description}
@@ -531,7 +683,7 @@ function AdminDashboard() {
                                                 rel="noopener noreferrer"
                                                 className="text-sm text-[#7938EB] font-medium hover:underline"
                                             >
-                                                Drive Link ↗
+                                                Drive Link
                                             </a>
 
                                         </div>
@@ -727,25 +879,62 @@ function AdminDashboard() {
 
 
                         {/* Modal buttons */}
-                        <div className="flex gap-3 mt-8">
+                        <button
+                            type="button"
+                            onClick={
+                                editingAssignmentId !== null
+                                    ? handleUpdateAssignment
+                                    : handleCreateAssignment
+                            }
+                            disabled={saving}
+                            className="flex-1 bg-[#7938EB] hover:bg-[#652BD0] text-white p-3 my-3 rounded-xl transition disabled:opacity-50"
+                        >
+                            {saving
+                                ? 'Saving...'
+                                : editingAssignmentId !== null
+                                    ? 'Update Assignment'
+                                    : 'Create Assignment'}
+                        </button>
+
+                    </div>
+
+                </div>
+
+            )}
+
+            {/* Delete Confirmation Modal */}
+            {deleteModal.id !== null && (
+
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/30 backdrop-blur-sm">
+
+                    <div className="bg-white w-full max-w-md rounded-2xl p-7 shadow-2xl">
+
+                        <p className=" text-black font-semibold text-center mt-3 leading-6">
+                            Are you sure you want to delete this assignment?
+
+                        </p>
+
+                        <div className="flex gap-3 mt-7">
 
                             <button
                                 type="button"
-                                onClick={handleCloseModal}
-                                disabled={saving}
+                                onClick={() => setDeleteModal({
+                                    id: null,
+                                    loading: false
+                                })}
+                                disabled={deleteModal.loading}
                                 className="flex-1 border border-zinc-300 text-zinc-600 py-3 rounded-xl hover:bg-zinc-50 transition disabled:opacity-50"
                             >
                                 Cancel
                             </button>
 
-
                             <button
                                 type="button"
-                                onClick={handleCreateAssignment}
-                                disabled={saving}
-                                className="flex-1 bg-[#7938EB] hover:bg-[#652BD0] text-white py-3 rounded-xl transition disabled:opacity-50"
+                                onClick={handleConfirmDelete}
+                                disabled={deleteModal.loading}
+                                className="flex-1 bg-red-500 hover:bg-red-600 text-white py-3 rounded-xl transition disabled:opacity-50"
                             >
-                                {saving ? 'Creating...' : 'Create Assignment'}
+                                {deleteModal.loading ? 'Deleting...' : 'Yes, Delete'}
                             </button>
 
                         </div>

@@ -93,7 +93,7 @@ function Login() {
 
                                 .then((createResponse) => {
 
-                                    toast.success('Student account created!')
+                                    toast.success(`${role} account created!`)
 
                                     return createResponse.data
 
@@ -101,8 +101,8 @@ function Login() {
 
                                 .catch((error) => {
 
-                                    console.error('Student creation error:', error)
-                                    toast.error('Unable to create student account')
+                                    console.error(`${role} creation error:`, error)
+                                    toast.error(`Unable to create ${role} account`)
 
                                     return null
 

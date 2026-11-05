@@ -291,7 +291,7 @@ function StudentDashboard() {
                     <div>
 
                         <h1 className="text-2xl sm:text-3xl font-semibold text-zinc-800">
-                            Good morning, {currentUser?.name}! 👋
+                            Hello, {currentUser?.name}! 👋
                         </h1>
 
                         <p className="text-zinc-400 mt-2 text-sm">
@@ -488,7 +488,7 @@ function StudentDashboard() {
                                             rel="noopener noreferrer"
                                             className="text-sm text-[#7938EB] font-medium hover:underline"
                                         >
-                                            Drive Link ↗
+                                            Drive Link
                                         </a>
 
                                     </div>

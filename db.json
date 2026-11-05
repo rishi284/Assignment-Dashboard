@@ -82,17 +82,8 @@
   ],
   "assignments": [
     {
-      "title": "React assignment",
-      "description": "asdfghjk",
-      "dueDate": "2026-11-06",
-      "driveLink": "https://drive.google.com/drive/home",
-      "createdBy": "admin_1793804769319",
-      "assignedTo": "all",
-      "id": 1
-    },
-    {
       "title": "PYTHON",
-      "description": "",
+      "description": "complete this asap",
       "dueDate": "2026-11-07",
       "driveLink": "asdf",
       "createdBy": "admin_1793804769319",
@@ -100,27 +91,5 @@
       "id": 2
     }
   ],
-  "submissions": [
-    {
-      "assignmentId": 1,
-      "studentId": "student_1793805189201",
-      "status": "Submitted",
-      "submittedAt": "2026-11-05T10:47:50.233Z",
-      "id": 1
-    },
-    {
-      "assignmentId": 1,
-      "studentId": "student_1793804720549",
-      "status": "Submitted",
-      "submittedAt": "2026-11-05T11:04:03.241Z",
-      "id": 2
-    },
-    {
-      "assignmentId": 1,
-      "studentId": "student_1793873026744",
-      "status": "Submitted",
-      "submittedAt": "2026-11-05T11:09:53.049Z",
-      "id": 3
-    }
-  ]
+  "submissions": []
 }
