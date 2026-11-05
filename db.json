@@ -48,6 +48,13 @@
       "email": "zxcvwe",
       "password": "zxcvqwer",
       "role": "Student"
+    },
+    {
+      "id": "student_1793885862161",
+      "name": "abcd",
+      "email": "abcd",
+      "password": "abcd",
+      "role": "Student"
     }
   ],
   "admins": [
@@ -78,18 +85,33 @@
       "email": "admin1",
       "password": "admin1",
       "role": "Admin"
+    },
+    {
+      "id": "student_1793885926519",
+      "name": "poiu",
+      "email": "poiu",
+      "password": "poiu",
+      "role": "Admin"
     }
   ],
   "assignments": [
     {
-      "title": "PYTHON",
-      "description": "complete this asap",
-      "dueDate": "2026-11-07",
-      "driveLink": "asdf",
+      "title": "react",
+      "description": "",
+      "dueDate": "2026-11-09",
+      "driveLink": "https://drive.google.com/drive/home",
       "createdBy": "admin_1793804769319",
       "assignedTo": "all",
-      "id": 2
+      "id": 3
     }
   ],
-  "submissions": []
+  "submissions": [
+    {
+      "assignmentId": 3,
+      "studentId": "student_1793885862161",
+      "status": "Submitted",
+      "submittedAt": "2026-11-05T13:39:15.239Z",
+      "id": 1
+    }
+  ]
 }
