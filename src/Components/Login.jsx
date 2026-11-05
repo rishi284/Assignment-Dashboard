@@ -215,14 +215,14 @@ function Login() {
                         {/* Email */}
                         <div className="my-5">
                             <label className="text-sm font-medium text-gray-700">
-                                Email
+                                Email or Username
                             </label>
 
                             <input
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                placeholder="Enter your email"
+                                placeholder="Enter your email or username"
                                 className="w-full mt-2 px-4 py-3 border border-gray-300 rounded-md outline-none focus:border-[#7938EB] text-sm"
                             />
                         </div>

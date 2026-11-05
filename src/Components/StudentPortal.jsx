@@ -544,9 +544,6 @@ function StudentDashboard() {
 
                     <div className="bg-white w-full max-w-md rounded-2xl p-7 shadow-2xl">
 
-                        <div className="w-14 h-14 bg-purple-100 text-[#7938EB] rounded-full flex items-center justify-center text-2xl mx-auto mb-5">
-                            ✓
-                        </div>
 
                         <h2 className="text-xl font-semibold text-zinc-800 text-center">
                             Confirm Submission
