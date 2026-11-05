@@ -1,9 +1,7 @@
 
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
-import axios from 'axios'
 import toast from 'react-hot-toast'
-const API_URL = import.meta.env.VITE_API_URL
 
 function StudentDashboard() {
 
@@ -22,6 +20,7 @@ function StudentDashboard() {
     const [selectedAssignment, setSelectedAssignment] = useState(null)
 
 
+
     // Fetch student assignments and submissions
     useEffect(() => {
 
@@ -30,62 +29,40 @@ function StudentDashboard() {
             return
         }
 
-        // GET request - Fetch all assignments
-        axios.get(`${API_URL}/assignments`)
+        // Get assignments from localStorage
+        const allAssignments = JSON.parse(
+            localStorage.getItem('assignments') || '[]'
+        )
 
-            .then((assignmentResponse) => {
+        // Get submissions from localStorage
+        const allSubmissions = JSON.parse(
+            localStorage.getItem('submissions') || '[]'
+        )
 
-                // Filter assignments assigned to the current student
-                const studentAssignments = assignmentResponse.data.filter(
-                    (item) => item.assignedTo === 'all'
-                )
+        // Filter assignments assigned to all students
+        const studentAssignments = allAssignments.filter(
+            (item) => item.assignedTo === 'all'
+        )
 
-                // GET request - Fetch current student's submissions
-                axios.get(`${API_URL}/submissions`, {
-                    params: {
-                        studentId: currentUser.id
-                    }
-                })
+        // Match assignments with current student's submissions
+        const updatedAssignments = studentAssignments.map((item) => {
 
-                    .then((submissionResponse) => {
+            const submission = allSubmissions.find(
+                (sub) =>
+                    String(sub.assignmentId) === String(item.id) &&
+                    String(sub.studentId) === String(currentUser.id)
+            )
 
-                        // Match assignments with submission records
-                        const updatedAssignments = studentAssignments.map((item) => {
+            return {
+                ...item,
+                status: submission ? submission.status : 'Pending',
+                submissionId: submission ? submission.id : null
+            }
 
-                            const submission = submissionResponse.data.find(
-                                (sub) => String(sub.assignmentId) === String(item.id)
-                            )
+        })
 
-                            return {
-                                ...item,
-                                status: submission ? submission.status : 'Pending',
-                                submissionId: submission ? submission.id : null
-                            }
-
-                        })
-
-                        setAssignments(updatedAssignments)
-                        setLoading(false)
-
-                    })
-
-                    .catch((error) => {
-
-                        console.error('Submission fetch error:', error)
-                        // toast.error('Unable to fetch submissions')
-                        setLoading(false)
-
-                    })
-
-            })
-
-            .catch((error) => {
-
-                console.error('Assignment fetch error:', error)
-                // toast.error('Unable to fetch assignments')
-                setLoading(false)
-
-            })
+        setAssignments(updatedAssignments)
+        setLoading(false)
 
     }, [currentUser, navigate])
 
@@ -128,7 +105,6 @@ function StudentDashboard() {
 
     }
 
-
     // Final submission confirmation
     const confirmSubmission = () => {
 
@@ -138,58 +114,70 @@ function StudentDashboard() {
 
         setSubmitting(true)
 
+        // Get existing submissions
+        const existingSubmissions = JSON.parse(
+            localStorage.getItem('submissions') || '[]'
+        )
+
+        // Check whether a submission already exists
+        const existingSubmission = existingSubmissions.find(
+            (item) =>
+                String(item.assignmentId) === String(selectedAssignment.id) &&
+                String(item.studentId) === String(currentUser.id)
+        )
+
+        // Create submission object
         const submissionData = {
+            id: existingSubmission
+                ? existingSubmission.id
+                : `submission_${Date.now()}`,
             assignmentId: selectedAssignment.id,
             studentId: currentUser.id,
             status: 'Submitted',
             submittedAt: new Date().toISOString()
         }
 
-        // Check whether a submission record already exists
-        const request = selectedAssignment.submissionId
-            ? axios.patch(`${API_URL}/submissions/${selectedAssignment.submissionId}`, submissionData)
-            : axios.post(`${API_URL}/submissions`, submissionData)
+        // Update existing submission or create a new one
+        const updatedSubmissions = existingSubmission
 
-        request
+            ? existingSubmissions.map((item) =>
+                String(item.assignmentId) === String(selectedAssignment.id) &&
+                    String(item.studentId) === String(currentUser.id)
+                    ? { ...item, ...submissionData }
+                    : item
+            )
 
-            .then((response) => {
+            : [...existingSubmissions, submissionData]
 
-                // Update the assignment status in React state
-                setAssignments((previousAssignments) =>
+        // Save submissions to localStorage
+        localStorage.setItem(
+            'submissions',
+            JSON.stringify(updatedSubmissions)
+        )
 
-                    previousAssignments.map((item) =>
+        // Update assignment status in React state
+        setAssignments((previousAssignments) =>
 
-                        item.id === selectedAssignment.id
+            previousAssignments.map((item) =>
 
-                            ? {
-                                ...item,
-                                status: 'Submitted',
-                                submissionId: response.data.id
-                            }
+                String(item.id) === String(selectedAssignment.id)
 
-                            : item
+                    ? {
+                        ...item,
+                        status: 'Submitted',
+                        submissionId: submissionData.id
+                    }
 
-                    )
+                    : item
 
-                )
+            )
 
-                setSelectedAssignment(null)
-                setSubmitting(false)
+        )
 
-                toast.success('Assignment submitted successfully!')
+        setSelectedAssignment(null)
+        setSubmitting(false)
 
-            })
-
-            .catch((error) => {
-
-                console.error('Submission error:', error)
-
-                toast.error('Unable to update submission')
-
-                setSubmitting(false)
-
-            })
-
+        toast.success('Assignment submitted successfully!')
     }
 
 

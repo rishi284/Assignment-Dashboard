@@ -1,9 +1,7 @@
 
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
-import axios from 'axios'
 import toast from 'react-hot-toast'
-const API_URL = import.meta.env.VITE_API_URL
 
 function AdminDashboard() {
 
@@ -40,6 +38,7 @@ function AdminDashboard() {
 
 
     // Fetch admin dashboard data
+    // Fetch admin dashboard data
     useEffect(() => {
 
         if (!currentUser || currentUser.role !== 'Admin') {
@@ -47,38 +46,29 @@ function AdminDashboard() {
             return
         }
 
-        Promise.all([
-            axios.get(`${API_URL}/assignments`),
-            axios.get(`${API_URL}/students`),
-            axios.get(`${API_URL}/submissions`)
-        ])
+        // Get data from localStorage
+        const allAssignments = JSON.parse(
+            localStorage.getItem('assignments') || '[]'
+        )
 
-            .then(([assignmentResponse, studentResponse, submissionResponse]) => {
+        const allStudents = JSON.parse(
+            localStorage.getItem('students') || '[]'
+        )
 
-                // Get only assignments created by this admin
-                const adminAssignments = assignmentResponse.data.filter(
-                    (item) => String(item.createdBy) === String(currentUser.id)
-                )
+        const allSubmissions = JSON.parse(
+            localStorage.getItem('submissions') || '[]'
+        )
 
-                // Get all students
-                const allStudents = studentResponse.data
+        // Only show assignments created by this admin
+        const adminAssignments = allAssignments.filter(
+            (item) => String(item.createdBy) === String(currentUser.id)
+        )
 
-                setAssignments(adminAssignments)
-                setStudents(allStudents)
-                setSubmissions(submissionResponse.data)
+        setAssignments(adminAssignments)
+        setStudents(allStudents)
+        setSubmissions(allSubmissions)
 
-                setLoading(false)
-
-            })
-
-            .catch((error) => {
-
-                console.error('Dashboard fetch error:', error)
-                toast.error('Unable to fetch dashboard data')
-
-                setLoading(false)
-
-            })
+        setLoading(false)
 
     }, [currentUser, navigate])
 
@@ -219,37 +209,37 @@ function AdminDashboard() {
 
         setSaving(true)
 
+        // Get existing assignments
+        const existingAssignments = JSON.parse(
+            localStorage.getItem('assignments') || '[]'
+        )
 
-        // POST request - Create assignment
-        axios.post(`${API_URL}/assignments`, newAssignment)
+        // Create updated assignments array
+        const updatedAssignments = [
+            ...existingAssignments,
+            {
+                id: `assignment_${Date.now()}`,
+                ...newAssignment
+            }
+        ]
 
-            .then((response) => {
+        // Save to localStorage
+        localStorage.setItem(
+            'assignments',
+            JSON.stringify(updatedAssignments)
+        )
 
-                // Add new assignment to dashboard
-                setAssignments((previousAssignments) => [
-                    ...previousAssignments,
-                    response.data
-                ])
+        // Update React state
+        setAssignments((previousAssignments) => [
+            ...previousAssignments,
+            updatedAssignments[updatedAssignments.length - 1]
+        ])
 
-                // Reset form
-                resetAssignmentForm()
+        resetAssignmentForm()
+        setShowCreateModal(false)
+        setSaving(false)
 
-                setShowCreateModal(false)
-                setSaving(false)
-
-                toast.success('Assignment created successfully!')
-
-            })
-
-            .catch((error) => {
-
-                console.error('Create assignment error:', error)
-
-                toast.error('Unable to create assignment')
-
-                setSaving(false)
-
-            })
+        toast.success('Assignment created successfully!')
     }
 
     // Edit assignment
@@ -267,6 +257,7 @@ function AdminDashboard() {
     }
 
     // Update assignment
+    // Update assignment
     const handleUpdateAssignment = () => {
 
         const { title, description, dueDate, driveLink } = assignmentForm
@@ -276,6 +267,10 @@ function AdminDashboard() {
             return
         }
 
+        if (!description.trim()) {
+            toast.error('Please enter assignment description')
+            return
+        }
 
         if (!dueDate) {
             toast.error('Please select due date')
@@ -289,85 +284,113 @@ function AdminDashboard() {
 
         setSaving(true)
 
-        axios.patch(`${API_URL}/assignments/${editingAssignmentId}`, {
-            title: title.trim(),
-            description: description.trim(),
-            dueDate,
-            driveLink: driveLink.trim()
+        // Get existing assignments
+        const existingAssignments = JSON.parse(
+            localStorage.getItem('assignments') || '[]'
+        )
+
+        // Update the selected assignment
+        const updatedAssignments = existingAssignments.map((item) => {
+
+            return String(item.id) === String(editingAssignmentId)
+                ? {
+                    ...item,
+                    title: title.trim(),
+                    description: description.trim(),
+                    dueDate,
+                    driveLink: driveLink.trim()
+                }
+                : item
+
         })
-            .then((response) => {
 
-                setAssignments((previousAssignments) =>
-                    previousAssignments.map((item) =>
-                        String(item.id) === String(editingAssignmentId)
-                            ? response.data
-                            : item
-                    )
-                )
+        // Save updated assignments
+        localStorage.setItem(
+            'assignments',
+            JSON.stringify(updatedAssignments)
+        )
 
-                resetAssignmentForm()
-                setShowCreateModal(false)
-                setSaving(false)
+        // Update React state
+        const updatedAssignment = updatedAssignments.find(
+            (item) => String(item.id) === String(editingAssignmentId)
+        )
 
-                toast.success('Assignment updated successfully!')
+        setAssignments((previousAssignments) =>
+            previousAssignments.map((item) =>
+                String(item.id) === String(editingAssignmentId)
+                    ? updatedAssignment
+                    : item
+            )
+        )
 
-            })
-            .catch((error) => {
+        resetAssignmentForm()
+        setShowCreateModal(false)
+        setSaving(false)
 
-                console.error('Update assignment error:', error)
-                toast.error('Unable to update assignment')
-                setSaving(false)
-
-            })
+        toast.success('Assignment updated successfully!')
     }
 
-    // Delete assignment
     // Open delete confirmation popup
     const handleDeleteAssignment = (assignmentId) => {
+
         setDeleteModal({
             id: assignmentId,
             loading: false
         })
+
     }
 
-    // Confirm assignment deletion
+    // Delete assignment
     const handleConfirmDelete = () => {
 
         if (deleteModal.id === null) return
 
-        setDeleteModal((previous) => ({
-            ...previous,
-            loading: true
-        }))
+        // Get existing data
+        const existingAssignments = JSON.parse(
+            localStorage.getItem('assignments') || '[]'
+        )
 
-        axios.delete(`${API_URL}/assignments/${deleteModal.id}`)
-            .then(() => {
+        const existingSubmissions = JSON.parse(
+            localStorage.getItem('submissions') || '[]'
+        )
 
-                setAssignments((previousAssignments) =>
-                    previousAssignments.filter(
-                        (item) => String(item.id) !== String(deleteModal.id)
-                    )
-                )
+        // Remove selected assignment
+        const updatedAssignments = existingAssignments.filter(
+            (item) => String(item.id) !== String(deleteModal.id)
+        )
 
-                setDeleteModal({
-                    id: null,
-                    loading: false
-                })
+        // Remove submissions belonging to that assignment
+        const updatedSubmissions = existingSubmissions.filter(
+            (item) => String(item.assignmentId) !== String(deleteModal.id)
+        )
 
-                toast.success('Assignment deleted successfully!')
+        // Save updated data
+        localStorage.setItem(
+            'assignments',
+            JSON.stringify(updatedAssignments)
+        )
 
-            })
-            .catch((error) => {
+        localStorage.setItem(
+            'submissions',
+            JSON.stringify(updatedSubmissions)
+        )
 
-                console.error('Delete assignment error:', error)
-                toast.error('Unable to delete assignment')
+        // Update React states
+        setAssignments((previousAssignments) =>
+            previousAssignments.filter(
+                (item) => String(item.id) !== String(deleteModal.id)
+            )
+        )
 
-                setDeleteModal((previous) => ({
-                    ...previous,
-                    loading: false
-                }))
+        setSubmissions(updatedSubmissions)
 
-            })
+        // Close popup
+        setDeleteModal({
+            id: null,
+            loading: false
+        })
+
+        toast.success('Assignment deleted successfully!')
     }
 
 
@@ -747,9 +770,11 @@ function AdminDashboard() {
 
                             <div>
 
-                                <h2 className="text-2xl font-semibold text-zinc-800">
-                                    Create Assignment
-                                </h2>
+                                <p className="text-2xl font-semibold text-zinc-800">
+                                    {editingAssignmentId !== null
+                                        ? 'Edit Assignment'
+                                        : 'Create Assignment'}
+                                </p>
 
                                 <p className="text-sm text-zinc-400 mt-1">
                                     Add a new assignment for your students.
@@ -901,7 +926,7 @@ function AdminDashboard() {
             {/* Delete Confirmation Modal */}
             {deleteModal.id !== null && (
 
-                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/30 backdrop-blur-sm">
+                <div className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-black/30 backdrop-blur-sm">
 
                     <div className="bg-white w-full max-w-md rounded-2xl p-7 shadow-2xl">
 
