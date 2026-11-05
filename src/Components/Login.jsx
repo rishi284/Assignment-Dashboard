@@ -177,15 +177,11 @@ function Login() {
 
                     <div className="w-full max-w-md mx-auto">
 
-                       
-
-                        <p className="text-lg text-gray-400 mt-2 mb-9">
-                            Sign in to continue to your account
-                        </p>
+                    
 
                         {/* Role selection */}
                         <div className="mb-7">
-                            <label className="text-md font-medium">
+                            <label className="text-2xl font-medium">
                                 Login as
                             </label>
 

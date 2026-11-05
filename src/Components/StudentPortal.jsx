@@ -255,7 +255,7 @@ function StudentDashboard() {
 
                     <button
                         onClick={handleLogout}
-                        className="w-full text-white text-center bg-rose-500 py-3 rounded-xl transition"
+                        className="w-full text-white text-center bg-rose-500 py-3 rounded-xl cursor-pointer"
                     >
                          Logout
                     </button>
@@ -274,7 +274,7 @@ function StudentDashboard() {
 
                     <button
                         onClick={handleLogout}
-                        className="text-sm text-white font-medium rounded-lg p-2 bg-rose-500"
+                        className="text-sm text-white font-medium rounded-lg p-2 bg-rose-500 cursor-pointer"
                     >
                         Logout
                     </button>

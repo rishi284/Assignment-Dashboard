@@ -324,9 +324,9 @@ function AdminDashboard() {
 
                     <button
                         onClick={handleLogout}
-                        className="w-full text-left text-red-500 hover:bg-red-50 px-4 py-3 rounded-xl transition"
+                        className="w-full text-center text-white bg-rose-500  py-3 rounded-xl  cursor-pointer"
                     >
-                        ↪ Logout
+                         Logout
                     </button>
 
                 </div>
@@ -342,7 +342,7 @@ function AdminDashboard() {
 
                     <button
                         onClick={handleLogout}
-                        className="text-sm text-white bg-rose-500 p-2 rounded-lg font-medium"
+                        className="text-sm text-white bg-rose-500 p-2 rounded-lg font-medium cursor-pointer"
                     >
                         Logout
                     </button>
@@ -457,7 +457,7 @@ function AdminDashboard() {
 
                         <button
                             onClick={() => setShowCreateModal(true)}
-                            className="bg-[#7938EB] hover:bg-[#652BD0] text-white px-5 py-3 rounded-xl font-medium transition-all"
+                            className="bg-[#7938EB] hover:bg-[#652BD0] text-white px-5 py-3 rounded-xl font-medium transition-all cursor-pointer"
                         >
                             + Create Assignment
                         </button>
