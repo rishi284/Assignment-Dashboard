@@ -41,7 +41,7 @@ function Login() {
     const getUsers = () => {
         const users = JSON.parse(localStorage.getItem("users") || "[]");
 
-        return Array.isArray(users) ? users : [];
+        return  users || [];
     };
 
     // Handle signup
@@ -186,7 +186,7 @@ function Login() {
         }
 
         // Generate simulated authentication token
-        const simulatedToken = `joineazy_${existingUser.id}}`;
+        const simulatedToken = existingUser.id;
 
         // Store logged-in user details
         const loggedInUser = {
@@ -235,7 +235,7 @@ function Login() {
 
                         {showSignup ? (
 
-                            // ================= SIGNUP FORM =================
+                            //  SIGNUP FORM 
 
                             <>
                                 {/* Signup heading */}
@@ -243,17 +243,13 @@ function Login() {
                                     Create Account
                                 </h1>
 
-                                <p className="text-sm text-zinc-400 mt-2 mb-7">
-                                    Register to get started with Joineazy.
-                                </p>
-
-                                <form onSubmit={handleSignup} className="space-y-4">
+                                <div onSubmit={handleSignup} className="space-y-4 my-4">
 
                                     {/* Username */}
                                     <div>
-                                        <label className="text-sm font-medium text-gray-700">
+                                        <p className="text-sm font-medium text-gray-700">
                                             Username
-                                        </label>
+                                        </p>
 
                                         <input
                                             type="text"
@@ -268,9 +264,9 @@ function Login() {
 
                                     {/* Email */}
                                     <div>
-                                        <label className="text-sm font-medium text-gray-700">
+                                        <p className="text-sm font-medium text-gray-700">
                                             Email
-                                        </label>
+                                        </p>
 
                                         <input
                                             type="email"
@@ -285,9 +281,9 @@ function Login() {
 
                                     {/* Role selection */}
                                     <div>
-                                        <label className="text-sm font-medium text-gray-700">
+                                        <p className="text-sm font-medium text-gray-700">
                                             Register As
-                                        </label>
+                                        </p>
 
                                         <select
                                             name="role"
@@ -296,15 +292,15 @@ function Login() {
                                             className="w-full mt-2 px-4 py-3 border border-gray-300 rounded-md outline-none focus:border-[#7938EB] text-sm bg-white"
                                         >
                                             <option value="Student">Student</option>
-                                            <option value="Professor">Professor</option>
+                                            <option value="Professor">Admin</option>
                                         </select>
                                     </div>
 
                                     {/* Password */}
                                     <div>
-                                        <label className="text-sm font-medium text-gray-700">
+                                        <p className="text-sm font-medium text-gray-700">
                                             Password
-                                        </label>
+                                        </p>
 
                                         <input
                                             type={showPassword ? "text" : "password"}
@@ -319,9 +315,9 @@ function Login() {
 
                                     {/* Confirm password */}
                                     <div>
-                                        <label className="text-sm font-medium text-gray-700">
+                                        <p className="text-sm font-medium text-gray-700">
                                             Confirm Password
-                                        </label>
+                                        </p>
 
                                         <input
                                             type={showPassword ? "text" : "password"}
@@ -346,12 +342,12 @@ function Login() {
                                             className="accent-[#7938EB]"
                                         />
 
-                                        <label
+                                        <p
                                             htmlFor="showPassword"
                                             className="text-sm text-gray-600"
                                         >
                                             Show password
-                                        </label>
+                                        </p>
                                     </div>
 
                                     {/* Create account button */}
@@ -361,7 +357,7 @@ function Login() {
                                         Create Account
                                     </button>
 
-                                </form>
+                                </div>
 
                                 {/* Back to Login */}
                                 <p className="text-center text-sm text-gray-500 mt-6">
@@ -390,16 +386,12 @@ function Login() {
                                     Welcome Back!
                                 </h1>
 
-                                <p className="text-sm text-zinc-400 mt-2 mb-7">
-                                    Login to continue to Joineazy.
-                                </p>
-
                                 {/* Role selection */}
-                                <div className="mb-7">
+                                <div className="my-7">
 
-                                    <label className="text-2xl font-medium">
+                                    <p className="text-2xl font-medium">
                                         Login as
-                                    </label>
+                                    </p>
 
                                     <div className="flex gap-3 mt-3">
 
@@ -424,7 +416,7 @@ function Login() {
                                                     : "border-zinc-300 text-zinc-500 hover:bg-purple-200"
                                                 }`}
                                         >
-                                            Professor
+                                            Admin
                                         </button>
 
                                     </div>
@@ -435,9 +427,9 @@ function Login() {
                                     {/* Email or Username */}
                                     <div className="my-5">
 
-                                        <label className="text-sm font-medium text-gray-700">
+                                        <p className="text-sm font-medium text-gray-700">
                                             Email or Username
-                                        </label>
+                                        </p>
 
                                         <input
                                             type="text"
@@ -453,9 +445,9 @@ function Login() {
                                     {/* Password */}
                                     <div className="my-4">
 
-                                        <label className="text-sm font-medium text-gray-700">
+                                        <p className="text-sm font-medium text-gray-700">
                                             Password
-                                        </label>
+                                        </p>
 
                                         <input
                                             type={showPassword ? "text" : "password"}
@@ -480,12 +472,12 @@ function Login() {
                                             className="accent-[#7938EB]"
                                         />
 
-                                        <label
+                                        <p
                                             htmlFor="loginShowPassword"
                                             className="text-sm text-gray-600"
                                         >
                                             Show password
-                                        </label>
+                                        </p>
                                     </div>
 
                                     {/* Login button */}

@@ -16,18 +16,17 @@ function StudentGroups({
 	const [groupName, setGroupName] = useState("");
 	const [selectedGroupId, setSelectedGroupId] = useState("");
 
-	// ---------------------------------
+
 	// Helper functions
-	// ---------------------------------
 
 	const getMemberIds = (group) => {
 		let memberIds = [];
 
-		if (Array.isArray(group.memberIds)) {
+		if (group.memberIds) {
 			memberIds = [...group.memberIds];
-		} else if (Array.isArray(group.members)) {
+		} else if (group.members) {
 			memberIds = group.members.map((member) =>
-				typeof member === "object"
+				member && typeof member === "object"
 					? member.id ?? member.studentId
 					: member
 			);
@@ -48,9 +47,8 @@ function StudentGroups({
 		return user?.username || user?.name || user?.email || "Student";
 	};
 
-	// ---------------------------------
+
 	// Find current student's group
-	// ---------------------------------
 
 	const currentGroup = groups.find(
 		(group) =>
@@ -69,9 +67,8 @@ function StudentGroups({
 		currentGroup &&
 		String(currentGroup.leaderId) === String(currentUser.id);
 
-	// ---------------------------------
+
 	// Create group
-	// ---------------------------------
 
 	const handleCreate = (e) => {
 		e.preventDefault();
@@ -85,9 +82,9 @@ function StudentGroups({
 		}
 	};
 
-	// ---------------------------------
+
 	// Join group
-	// ---------------------------------
+
 
 	const handleJoin = () => {
 		if (!selectedGroupId) {
@@ -102,9 +99,8 @@ function StudentGroups({
 		}
 	};
 
-	// ---------------------------------
+
 	// Close modal
-	// ---------------------------------
 
 	const handleClose = () => {
 		setGroupName("");
@@ -113,16 +109,13 @@ function StudentGroups({
 		onClose();
 	};
 
-	// ---------------------------------
+
 	// UI
-	// ---------------------------------
 
 	return (
 		<>
 
-			{/* ---------------------------------
-          GROUP INFORMATION
-      --------------------------------- */}
+			{/* GROUP INFORMATION */}
 
 			<section className="bg-white p-6 rounded-2xl shadow-sm border border-zinc-100 mb-7">
 
@@ -207,7 +200,7 @@ function StudentGroups({
 								);
 								onOpen();
 							}}
-							className="mt-4 bg-[#7938EB] hover:bg-[#652BD0] text-white px-5 py-2.5 rounded-lg text-sm font-medium transition"
+							className="mt-4 bg-[#7938EB] hover:bg-[#652BD0] text-white px-5 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 cursor-pointer"
 						>
 							Create or Join Group
 						</button>
@@ -218,9 +211,7 @@ function StudentGroups({
 
 			</section>
 
-			{/* ---------------------------------
-          CREATE / JOIN GROUP MODAL
-      --------------------------------- */}
+			{/* CREATE / JOIN GROUP MODAL */}
 
 			{open && (
 
@@ -238,9 +229,9 @@ function StudentGroups({
 							<button
 								type="button"
 								onClick={handleClose}
-								className="text-2xl text-zinc-400 hover:text-zinc-700"
+								className="text-2xl text-zinc-400 hover:text-red-500 cursor-pointer"
 							>
-								×
+								x
 							</button>
 
 						</div>
@@ -255,9 +246,9 @@ function StudentGroups({
 							<button
 								type="button"
 								onClick={() => setGroupAction("create")}
-								className={`flex-1 py-3 rounded-lg border text-sm font-medium transition ${groupAction === "create"
-										? "bg-[#7938EB] text-white border-[#7938EB]"
-										: "border-zinc-300 text-zinc-500 hover:bg-purple-50"
+								className={`flex-1 py-3 rounded-lg border text-sm font-medium cursor-pointer ${groupAction === "create"
+									? "bg-[#7938EB] text-white border-[#7938EB]"
+									: "border-zinc-300 text-zinc-500 hover:bg-purple-50"
 									}`}
 							>
 								Create Group
@@ -266,9 +257,9 @@ function StudentGroups({
 							<button
 								type="button"
 								onClick={() => setGroupAction("join")}
-								className={`flex-1 py-3 rounded-lg border text-sm font-medium transition ${groupAction === "join"
-										? "bg-[#7938EB] text-white border-[#7938EB]"
-										: "border-zinc-300 text-zinc-500 hover:bg-purple-50"
+								className={`flex-1 py-3 rounded-lg border text-sm font-medium transition cursor-pointer ${groupAction === "join"
+									? "bg-[#7938EB] text-white border-[#7938EB]"
+									: "border-zinc-300 text-zinc-500 hover:bg-purple-50"
 									}`}
 							>
 								Join Group
@@ -279,7 +270,7 @@ function StudentGroups({
 						{/* Create group form */}
 						{groupAction === "create" && (
 
-							<form onSubmit={handleCreate}>
+							<div onSubmit={handleCreate}>
 
 								<label className="block text-sm font-medium text-zinc-700 mb-2">
 									Group Name
@@ -307,12 +298,12 @@ function StudentGroups({
 
 								<button
 									type="submit"
-									className="w-full mt-6 bg-[#7938EB] hover:bg-[#652BD0] text-white py-3 rounded-xl font-medium transition"
+									className="w-full mt-6 bg-[#7938EB] hover:bg-[#652BD0] text-white py-3 rounded-xl font-medium transition-all duration-300 cursor-pointer"
 								>
 									Create Group
 								</button>
 
-							</form>
+							</div>
 
 						)}
 
@@ -356,8 +347,8 @@ function StudentGroups({
 													key={group.id}
 													onClick={() => setSelectedGroupId(String(group.id))}
 													className={`w-full text-left p-4 rounded-xl border transition ${String(selectedGroupId) === String(group.id)
-															? "border-[#7938EB] bg-purple-50"
-															: "border-zinc-200 hover:border-purple-300"
+														? "border-[#7938EB] bg-purple-50"
+														: "border-zinc-200 hover:border-purple-300"
 														}`}
 												>
 

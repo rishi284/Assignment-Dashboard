@@ -13,9 +13,8 @@ function StudentAssignments({
     const [selectedAssignment, setSelectedAssignment] = useState(null);
     const [submitting, setSubmitting] = useState(false);
 
-    // ---------------------------------
+   
     // Helper functions
-    // ---------------------------------
 
     const isGroupAssignment = (assignment) => {
         return (
@@ -65,9 +64,8 @@ function StudentAssignments({
         );
     };
 
-    // ---------------------------------
+   
     // Deadline functions
-    // ---------------------------------
 
     const getDeadline = (value) => {
         if (!value) {
@@ -122,10 +120,9 @@ function StudentAssignments({
         );
     };
 
-    // ---------------------------------
+   
     // Confirmation
-    // ---------------------------------
-
+   
     const openConfirmation = (assignment) => {
         setSelectedAssignment(assignment);
     };
@@ -146,12 +143,8 @@ function StudentAssignments({
         }
     };
 
-    // ---------------------------------
-    // UI
-    // ---------------------------------
-
     return (
-        <section id="assignments">
+        <div id="assignments">
 
             {/* Heading */}
             <div className="flex justify-between items-center mb-5">
@@ -278,7 +271,7 @@ function StudentAssignments({
                                             href={oneDriveLink}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="text-sm text-[#7938EB] font-medium hover:underline"
+                                            className="text-sm text-[#7938EB] font-medium hover:underline cursor-pointer"
                                         >
                                             ↗ Open OneDrive Link
                                         </a>
@@ -310,7 +303,7 @@ function StudentAssignments({
                                             <button
                                                 type="button"
                                                 onClick={() => openConfirmation(item)}
-                                                className="w-full bg-[#7938EB] hover:bg-[#652BD0] text-white py-3 rounded-xl font-medium text-sm transition-all duration-300"
+                                                className="w-full bg-[#7938EB] hover:bg-[#652BD0] text-white py-3 rounded-xl font-medium text-sm transition-all duration-300 cursor-pointer"
                                             >
                                                 Yes, I have submitted
                                             </button>
@@ -434,7 +427,7 @@ function StudentAssignments({
                                 type="button"
                                 onClick={() => setSelectedAssignment(null)}
                                 disabled={submitting}
-                                className="flex-1 border border-zinc-300 text-zinc-600 py-3 rounded-xl hover:bg-zinc-50 transition disabled:opacity-50"
+                                className="flex-1 border border-zinc-300 text-zinc-600 py-3 rounded-xl hover:bg-zinc-50 transition disabled:opacity-50 cursor-pointer"
                             >
                                 Go Back
                             </button>
@@ -443,9 +436,9 @@ function StudentAssignments({
                                 type="button"
                                 onClick={handleConfirmSubmission}
                                 disabled={submitting}
-                                className="flex-1 bg-[#7938EB] text-white py-3 rounded-xl hover:bg-[#652BD0] transition disabled:opacity-50"
+                                className="flex-1 bg-[#7938EB] text-white py-3 rounded-xl hover:bg-[#652BD0] transition disabled:opacity-50 cursor-pointer"
                             >
-                                {submitting ? "Submitting..." : "Confirm"}
+                                confirm
                             </button>
 
                         </div>
@@ -456,7 +449,7 @@ function StudentAssignments({
 
             )}
 
-        </section>
+        </div>
     );
 }
 

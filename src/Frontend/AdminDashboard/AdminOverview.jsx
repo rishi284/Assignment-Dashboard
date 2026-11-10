@@ -171,7 +171,7 @@ function AdminOverview({
                                     type="button"
                                     key={course.id}
                                     onClick={() => onSelectCourse(course.id)}
-                                    className="text-left bg-white p-6 rounded-2xl shadow-sm border border-zinc-100 hover:shadow-lg hover:border-purple-200 transition-all duration-300"
+                                    className="text-left bg-white p-6 rounded-2xl shadow-sm border border-zinc-100 hover:shadow-lg hover:border-purple-200 transition-all duration-300 cursor-pointer"
                                 >
 
                                     <div className="flex justify-between items-start mb-5">

@@ -1,264 +1,246 @@
 
 function StudentOverview({
-  currentUser,
-  courses,
-  stats,
-  courseStats,
-  onSelectCourse,
+	currentUser,
+	courses,
+	stats,
+	courseStats,
+	onSelectCourse,
 }) {
-  const studentName =
-    currentUser?.username ||
-    currentUser?.name ||
-    currentUser?.email ||
-    "Student";
-
-  return (
-    <div>
+	const studentName =
+		currentUser?.username ||
+		currentUser?.name ||
+		currentUser?.email ||
+		"Student";
 
-      {/* Welcome section */}
-      <section className="flex flex-wrap justify-between items-center gap-4 mb-9">
+	return (
+		<div>
 
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-semibold text-zinc-800">
-            Hello, {studentName}! 👋
-          </h1>
+			{/* Welcome section */}
+			<div className="flex flex-wrap justify-between items-center gap-4 mb-9">
 
-          <p className="text-zinc-400 mt-2 text-sm">
-            Here's your learning and assignment overview.
-          </p>
-        </div>
+				<div>
+					<h1 className="text-2xl sm:text-3xl font-semibold text-zinc-800">
+						Hello, {studentName}! 👋
+					</h1>
 
-        <div className="hidden sm:flex items-center gap-3 bg-white rounded-xl px-4 py-3 shadow-sm">
+					<p className="text-zinc-400 mt-2 text-sm">
+						Here's your learning and assignment overview.
+					</p>
+				</div>
 
-          <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center text-[#7938EB] font-bold">
-            {studentName.charAt(0).toUpperCase()}
-          </div>
+			</div>
 
-          <div>
-            <p className="text-sm font-semibold text-zinc-700">
-              {studentName}
-            </p>
+			{/* Statistics */}
+			<div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-7">
 
-            <p className="text-xs text-zinc-400">
-              Student
-            </p>
-          </div>
+				<div className="bg-white p-6 rounded-2xl shadow-sm border border-zinc-100">
+					<p className="text-sm text-zinc-500">
+						My Courses
+					</p>
 
-        </div>
+					<h2 className="text-3xl font-bold text-[#7938EB] mt-3">
+						{String(stats.totalCourses).padStart(2, "0")}
+					</h2>
+				</div>
 
-      </section>
+				<div className="bg-white p-6 rounded-2xl shadow-sm border border-zinc-100">
+					<p className="text-sm text-zinc-500">
+						Total Assignments
+					</p>
 
-      {/* Statistics */}
-      <section className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-7">
+					<h2 className="text-3xl font-bold text-zinc-800 mt-3">
+						{String(stats.totalAssignments).padStart(2, "0")}
+					</h2>
+				</div>
 
-        <div className="bg-white p-6 rounded-2xl shadow-sm border border-zinc-100">
-          <p className="text-sm text-zinc-500">
-            My Courses
-          </p>
+				<div className="bg-white p-6 rounded-2xl shadow-sm border border-zinc-100">
+					<p className="text-sm text-zinc-500">
+						Pending Acknowledgments
+					</p>
 
-          <h2 className="text-3xl font-bold text-[#7938EB] mt-3">
-            {String(stats.totalCourses).padStart(2, "0")}
-          </h2>
-        </div>
+					<h2 className="text-3xl font-bold text-orange-500 mt-3">
+						{String(stats.pendingCount).padStart(2, "0")}
+					</h2>
+				</div>
 
-        <div className="bg-white p-6 rounded-2xl shadow-sm border border-zinc-100">
-          <p className="text-sm text-zinc-500">
-            Total Assignments
-          </p>
+			</div>
 
-          <h2 className="text-3xl font-bold text-zinc-800 mt-3">
-            {String(stats.totalAssignments).padStart(2, "0")}
-          </h2>
-        </div>
+			{/* Overall progress */}
+			<div className="bg-white p-6 rounded-2xl shadow-sm border border-zinc-100 mb-9">
 
-        <div className="bg-white p-6 rounded-2xl shadow-sm border border-zinc-100">
-          <p className="text-sm text-zinc-500">
-            Pending Acknowledgments
-          </p>
+				<div className="flex justify-between items-center mb-4">
 
-          <h2 className="text-3xl font-bold text-orange-500 mt-3">
-            {String(stats.pendingCount).padStart(2, "0")}
-          </h2>
-        </div>
+					<div>
+						<h2 className="font-semibold text-zinc-800">
+							Overall Progress
+						</h2>
 
-      </section>
+						<p className="text-sm text-zinc-400 mt-1">
+							{stats.acknowledgedCount} of {stats.totalAssignments} assignments acknowledged
+						</p>
+					</div>
 
-      {/* Overall progress */}
-      <section className="bg-white p-6 rounded-2xl shadow-sm border border-zinc-100 mb-9">
+					<span className="text-xl font-bold text-[#7938EB]">
+						{stats.overallProgress}%
+					</span>
 
-        <div className="flex justify-between items-center mb-4">
+				</div>
 
-          <div>
-            <h2 className="font-semibold text-zinc-800">
-              Overall Progress
-            </h2>
+				<div className="w-full h-3 bg-purple-100 rounded-full overflow-hidden">
 
-            <p className="text-sm text-zinc-400 mt-1">
-              {stats.acknowledgedCount} of {stats.totalAssignments} assignments acknowledged
-            </p>
-          </div>
+					<div
+						className="h-full bg-[#7938EB] rounded-full transition-all duration-500"
+						style={{
+							width: `${stats.overallProgress}%`,
+						}}
+					/>
 
-          <span className="text-xl font-bold text-[#7938EB]">
-            {stats.overallProgress}%
-          </span>
+				</div>
 
-        </div>
+			</div>
 
-        <div className="w-full h-3 bg-purple-100 rounded-full overflow-hidden">
+			{/* Courses */}
+			<div id="courses">
 
-          <div
-            className="h-full bg-[#7938EB] rounded-full transition-all duration-500"
-            style={{
-              width: `${stats.overallProgress}%`,
-            }}
-          />
+				<div className="flex justify-between items-center mb-5">
 
-        </div>
+					<div>
+						<h2 className="text-xl font-semibold text-zinc-800">
+							My Courses
+						</h2>
 
-      </section>
+						<p className="text-sm text-zinc-400 mt-1">
+							Select a course to view its assignments.
+						</p>
+					</div>
 
-      {/* Courses */}
-      <section id="courses">
+					<span className="text-sm text-zinc-400">
+						{courses.length} courses
+					</span>
 
-        <div className="flex justify-between items-center mb-5">
+				</div>
 
-          <div>
-            <h2 className="text-xl font-semibold text-zinc-800">
-              My Courses
-            </h2>
+				{courses.length === 0 ? (
 
-            <p className="text-sm text-zinc-400 mt-1">
-              Select a course to view its assignments.
-            </p>
-          </div>
+					<div className="bg-white rounded-2xl p-12 text-center border border-zinc-100">
 
-          <span className="text-sm text-zinc-400">
-            {courses.length} courses
-          </span>
+						<div className="text-4xl mb-4">
+							📚
+						</div>
 
-        </div>
+						<h3 className="text-lg font-semibold text-zinc-700">
+							No courses available
+						</h3>
 
-        {courses.length === 0 ? (
+						<p className="text-sm text-zinc-400 mt-2">
+							Your enrolled courses will appear here.
+						</p>
 
-          <div className="bg-white rounded-2xl p-12 text-center border border-zinc-100">
+					</div>
 
-            <div className="text-4xl mb-4">
-              📚
-            </div>
+				) : (
 
-            <h3 className="text-lg font-semibold text-zinc-700">
-              No courses available
-            </h3>
+					<div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 *:cursor-pointer">
 
-            <p className="text-sm text-zinc-400 mt-2">
-              Your enrolled courses will appear here.
-            </p>
+						{courses.map((course) => {
 
-          </div>
+							const courseProgress = courseStats[course.id] || {
+								total: 0,
+								acknowledged: 0,
+								pending: 0,
+								progress: 0,
+							};
 
-        ) : (
+							return (
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+								<button
+									key={course.id}
+									type="button"
+									onClick={() => onSelectCourse(course.id)}
+									className="text-left bg-white p-6 rounded-2xl shadow-sm border border-zinc-100 hover:shadow-lg hover:border-purple-200 transition-all duration-300"
+								>
 
-            {courses.map((course) => {
+									<div className="flex justify-between items-start mb-5">
 
-              const courseProgress = courseStats[course.id] || {
-                total: 0,
-                acknowledged: 0,
-                pending: 0,
-                progress: 0,
-              };
+										<div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center text-2xl">
+											📘
+										</div>
 
-              return (
+										<span className="text-xs font-medium bg-purple-50 text-[#7938EB] px-3 py-1.5 rounded-full">
+											{courseProgress.total} assignments
+										</span>
 
-                <button
-                  key={course.id}
-                  type="button"
-                  onClick={() => onSelectCourse(course.id)}
-                  className="text-left bg-white p-6 rounded-2xl shadow-sm border border-zinc-100 hover:shadow-lg hover:border-purple-200 transition-all duration-300"
-                >
+									</div>
 
-                  <div className="flex justify-between items-start mb-5">
+									<h3 className="text-lg font-semibold text-zinc-800">
+										{course.name || course.title || "Untitled Course"}
+									</h3>
 
-                    <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center text-2xl">
-                      📘
-                    </div>
+									{course.code && (
+										<p className="text-xs text-zinc-400 mt-1">
+											Course Code: {course.code}
+										</p>
+									)}
 
-                    <span className="text-xs font-medium bg-purple-50 text-[#7938EB] px-3 py-1.5 rounded-full">
-                      {courseProgress.total} assignments
-                    </span>
+									{course.description && (
+										<p className="text-sm text-zinc-500 mt-3 line-clamp-2">
+											{course.description}
+										</p>
+									)}
 
-                  </div>
+									{/* Course progress */}
+									<div className="mt-6">
 
-                  <h3 className="text-lg font-semibold text-zinc-800">
-                    {course.name || course.title || "Untitled Course"}
-                  </h3>
+										<div className="flex justify-between text-xs mb-2">
 
-                  {course.code && (
-                    <p className="text-xs text-zinc-400 mt-1">
-                      Course Code: {course.code}
-                    </p>
-                  )}
+											<span className="text-zinc-500">
+												Assignment Progress
+											</span>
 
-                  {course.description && (
-                    <p className="text-sm text-zinc-500 mt-3 line-clamp-2">
-                      {course.description}
-                    </p>
-                  )}
+											<span className="font-semibold text-[#7938EB]">
+												{courseProgress.progress}%
+											</span>
 
-                  {/* Course progress */}
-                  <div className="mt-6">
+										</div>
 
-                    <div className="flex justify-between text-xs mb-2">
+										<div className="w-full h-2 bg-purple-100 rounded-full overflow-hidden">
 
-                      <span className="text-zinc-500">
-                        Assignment Progress
-                      </span>
+											<div
+												className="h-full bg-[#7938EB] rounded-full transition-all duration-500"
+												style={{
+													width: `${courseProgress.progress}%`,
+												}}
+											/>
 
-                      <span className="font-semibold text-[#7938EB]">
-                        {courseProgress.progress}%
-                      </span>
+										</div>
 
-                    </div>
+									</div>
 
-                    <div className="w-full h-2 bg-purple-100 rounded-full overflow-hidden">
+									<div className="flex justify-between items-center mt-6 text-sm">
 
-                      <div
-                        className="h-full bg-[#7938EB] rounded-full transition-all duration-500"
-                        style={{
-                          width: `${courseProgress.progress}%`,
-                        }}
-                      />
+										<span className="text-zinc-500">
+											View assignments
+										</span>
 
-                    </div>
+										<span className="text-[#7938EB] font-bold">
+											→
+										</span>
 
-                  </div>
+									</div>
 
-                  <div className="flex justify-between items-center mt-6 text-sm">
+								</button>
 
-                    <span className="text-zinc-500">
-                      View assignments
-                    </span>
+							);
+						})}
 
-                    <span className="text-[#7938EB] font-bold">
-                      →
-                    </span>
+					</div>
 
-                  </div>
+				)}
 
-                </button>
+			</div>
 
-              );
-            })}
-
-          </div>
-
-        )}
-
-      </section>
-
-    </div>
-  );
+		</div>
+	);
 }
 
 export default StudentOverview;

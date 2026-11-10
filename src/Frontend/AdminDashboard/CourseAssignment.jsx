@@ -263,7 +263,7 @@ function AssignmentProgressCard({
                     <button
                         type="button"
                         onClick={onEdit}
-                        className="px-3 py-1.5 text-sm text-[#7938EB] bg-purple-50 rounded-lg hover:bg-purple-100"
+                        className="px-3 py-1.5 text-sm text-[#7938EB] bg-purple-50 rounded-lg hover:bg-purple-100 cursor-pointer"
                     >
                         Edit
                     </button>
@@ -271,7 +271,7 @@ function AssignmentProgressCard({
                     <button
                         type="button"
                         onClick={onDelete}
-                        className="px-3 py-1.5 text-sm text-red-500 bg-red-50 rounded-lg hover:bg-red-100"
+                        className="px-3 py-1.5 text-sm text-red-500 bg-red-50 rounded-lg hover:bg-red-100 cursor-pointer"
                     >
                         Delete
                     </button>
@@ -352,7 +352,7 @@ function AssignmentProgressCard({
             <button
                 type="button"
                 onClick={() => setShowDetails((previous) => !previous)}
-                className="w-full mt-5 border border-purple-200 text-[#7938EB] hover:bg-purple-50 py-2.5 rounded-xl text-sm font-medium transition"
+                className="w-full mt-5 border border-purple-200 text-[#7938EB] hover:bg-purple-50 py-2.5 rounded-xl text-sm font-medium transition cursor-pointer"
             >
                 {showDetails
                     ? "Hide Submission Details"

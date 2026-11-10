@@ -30,9 +30,9 @@ function StudentPortal() {
     // Group modal
     const [showGroupModal, setShowGroupModal] = useState(false);
 
-    // ---------------------------------
+
     // Authentication and data loading
-    // ---------------------------------
+
 
     useEffect(() => {
         const token = localStorage.getItem("authToken");
@@ -57,18 +57,18 @@ function StudentPortal() {
         setLoading(false);
     }, [currentUser, navigate]);
 
-    // ---------------------------------
+
     // Helper functions
-    // ---------------------------------
+
 
     const getGroupMemberIds = (group) => {
         let memberIds = [];
 
-        if (Array.isArray(group.memberIds)) {
+        if (group.memberIds) {
             memberIds = [...group.memberIds];
-        } else if (Array.isArray(group.members)) {
+        } else if (group.members) {
             memberIds = group.members.map((member) =>
-                typeof member === "object"
+                member && typeof member === "object"
                     ? member.id ?? member.studentId
                     : member
             );
@@ -90,9 +90,9 @@ function StudentPortal() {
         );
     };
 
-    // ---------------------------------
+
     // Courses available to this student
-    // ---------------------------------
+
 
     const visibleCourses = courses.filter((course) => {
         if (course.enrollAllStudents === true) {
@@ -105,18 +105,17 @@ function StudentPortal() {
             course.assignedStudentIds;
 
         // When a course has an explicit enrollment list
-        if (Array.isArray(studentIds) && studentIds.length > 0) {
+        if (studentIds && studentIds.length > 0) {
             return studentIds.map(String).includes(String(currentUser.id));
         }
 
-        // Backward compatibility: courses without an enrollment list
-        // are visible to all students.
+
         return true;
     });
 
-    // ---------------------------------
+
     // Selected course
-    // ---------------------------------
+
 
     const selectedCourse = visibleCourses.find(
         (course) => String(course.id) === String(selectedCourseId)
@@ -133,9 +132,9 @@ function StudentPortal() {
         ? getCourseGroup(selectedCourse.id)
         : null;
 
-    // ---------------------------------
+
     // Find acknowledgment
-    // ---------------------------------
+
 
     const getAcknowledgment = (assignment, courseId) => {
         if (assignment.submissionType === "Group") {
@@ -159,9 +158,9 @@ function StudentPortal() {
         );
     };
 
-    // ---------------------------------
+
     // Dashboard statistics
-    // ---------------------------------
+
 
     const courseStats = {};
 
@@ -190,15 +189,13 @@ function StudentPortal() {
 
     const totalCourses = visibleCourses.length;
 
-    const totalAssignments = Object.values(courseStats).reduce(
-        (total, item) => total + item.total,
-        0
-    );
+    let totalAssignments = 0;
+    let acknowledgedCount = 0;
 
-    const acknowledgedCount = Object.values(courseStats).reduce(
-        (total, item) => total + item.acknowledged,
-        0
-    );
+    for (const courseId in courseStats) {
+        totalAssignments += courseStats[courseId].total;
+        acknowledgedCount += courseStats[courseId].acknowledged;
+    }
 
     const pendingCount = totalAssignments - acknowledgedCount;
 
@@ -215,9 +212,7 @@ function StudentPortal() {
         overallProgress,
     };
 
-    // ---------------------------------
     // Logout
-    // ---------------------------------
 
     const handleLogout = () => {
         localStorage.removeItem("currentUser");
@@ -227,9 +222,8 @@ function StudentPortal() {
         navigate("/login");
     };
 
-    // ---------------------------------
+
     // Individual / group acknowledgment
-    // ---------------------------------
 
     const handleAcknowledge = (assignment) => {
         const isGroupAssignment =
@@ -319,9 +313,9 @@ function StudentPortal() {
         return true;
     };
 
-    // ---------------------------------
+
     // Create group
-    // ---------------------------------
+
 
     const handleCreateGroup = (groupName) => {
         if (!selectedCourse) {
@@ -382,9 +376,9 @@ function StudentPortal() {
         return true;
     };
 
-    // ---------------------------------
+
     // Join group
-    // ---------------------------------
+
 
     const handleJoinGroup = (groupId) => {
         if (!selectedCourse) {
@@ -439,9 +433,9 @@ function StudentPortal() {
         return true;
     };
 
-    
+
     // Main UI
-    
+
 
     const studentName =
         currentUser?.username ||
@@ -453,29 +447,27 @@ function StudentPortal() {
         <div className="min-h-screen bg-[#F8F7FC] flex">
 
             {/* Sidebar */}
-            <aside className="hidden md:flex w-64 bg-white border-r border-zinc-100 flex-col p-6">
+            <div className="hidden md:flex w-64 bg-white border-r border-zinc-100 flex-col p-6">
 
-                <h1 className="text-2xl font-bold text-[#7938EB] mb-10">
-                    Joineazy
-                </h1>
+
 
                 <nav className="flex flex-col gap-3">
 
                     <button
                         onClick={() => setSelectedCourseId(null)}
-                        className={`text-left px-4 py-3 rounded-xl font-medium transition ${!selectedCourse
-                                ? "bg-[#7938EB] text-white"
-                                : "text-zinc-500 hover:bg-purple-50 hover:text-[#7938EB]"
+                        className={`text-left px-4 py-3 rounded-xl font-medium cursor-pointer ${!selectedCourse
+                            ? "bg-[#7938EB] text-white"
+                            : "text-zinc-500 hover:bg-purple-50 hover:text-[#7938EB]"
                             }`}
                     >
-                        ▦ Dashboard
+                        Dashboard
                     </button>
 
                     <button
                         onClick={() => setSelectedCourseId(null)}
-                        className="text-left text-zinc-500 hover:bg-purple-50 hover:text-[#7938EB] px-4 py-3 rounded-xl transition"
+                        className="text-left text-zinc-500 hover:bg-purple-50 hover:text-[#7938EB] px-4 py-3 rounded-xl transition-all duration-300 cursor-pointer"
                     >
-                        ▤ My Courses
+                        My Courses
                     </button>
 
                 </nav>
@@ -503,28 +495,25 @@ function StudentPortal() {
 
                     <button
                         onClick={handleLogout}
-                        className="w-full text-white bg-rose-500 hover:bg-rose-600 py-3 rounded-xl transition"
+                        className="w-full text-white bg-rose-500 hover:bg-rose-600 py-3 rounded-xl transition-all duration-300 cursor-pointer"
                     >
                         Logout
                     </button>
 
                 </div>
 
-            </aside>
+            </div>
 
             {/* Main content */}
-            <main className="flex-1 p-5 sm:p-8 lg:p-10">
+            <div className="flex-1 p-5 sm:p-8 lg:p-10">
 
                 {/* Mobile header */}
                 <div className="flex md:hidden justify-between items-center mb-8">
 
-                    <h1 className="text-xl font-bold text-[#7938EB]">
-                        Joineazy
-                    </h1>
-
+                    
                     <button
                         onClick={handleLogout}
-                        className="text-sm text-white bg-rose-500 px-4 py-2 rounded-lg"
+                        className="text-sm text-white bg-rose-500 px-4 py-2 rounded-lg cursor-pointer"
                     >
                         Logout
                     </button>
@@ -554,7 +543,7 @@ function StudentPortal() {
                         {/* Back to courses */}
                         <button
                             onClick={() => setSelectedCourseId(null)}
-                            className="text-sm text-[#7938EB] font-medium hover:underline mb-5"
+                            className="text-sm text-[#7938EB] font-medium hover:underline mb-5 cursor-pointer"
                         >
                             ← Back to My Courses
                         </button>
@@ -613,7 +602,7 @@ function StudentPortal() {
 
                 )}
 
-            </main>
+            </div>
 
         </div>
     );
