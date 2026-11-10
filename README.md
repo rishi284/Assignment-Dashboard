@@ -73,6 +73,9 @@ Important: Create the accounts on the deployed website before recording or shari
 
 ![Login page](<Screenshot 2026-11-10 232458.png>)
 
+![Student Dashboard](<Screenshot 2026-11-10 232533.png>)
+
+![Admin Dashboard](<Screenshot 2026-11-10 232551.png>)
 
 Component Structure
 The main dashboard components are organized by user role. The structure below shows the key files; adjust it if your final repository uses different paths.
