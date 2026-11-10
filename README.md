@@ -74,6 +74,7 @@ Important: Create the accounts on the deployed website before recording or shari
 
 Component Structure
 The main dashboard components are organized by user role. The structure below shows the key files; adjust it if your final repository uses different paths.
+
 src/
 ├── App.jsx
 ├── main.jsx
@@ -92,6 +93,7 @@ src/
         ├── StudentOverview.jsx
         ├── StudentAssignments.jsx
         └── StudentGroups.jsx
+        
 Main component responsibilities
 - Login.jsx – registration, login, validation, and role-based navigation.
 - AdminPortal.jsx – professor authentication, dashboard state, course and assignment operations, and data handling.
