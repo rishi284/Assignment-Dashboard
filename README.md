@@ -71,6 +71,8 @@ Student	ADD_STUDENT_EMAIL_OR_USERNAME	ADD_STUDENT_PASSWORD
 
 Important: Create the accounts on the deployed website before recording or sharing the demo credentials. Because this project uses localStorage, the accounts are available only in the same browser profile and on the same website origin where they were created. A new browser or device will have separate data.
 
+![Login page](<Screenshot 2026-11-10 232458.png>)
+
 
 Component Structure
 The main dashboard components are organized by user role. The structure below shows the key files; adjust it if your final repository uses different paths.
