@@ -243,7 +243,7 @@ function Login() {
                                     Create Account
                                 </h1>
 
-                                <div onSubmit={handleSignup} className="space-y-4 my-4">
+                                <form onSubmit={handleSignup} className="space-y-4 my-4">
 
                                     {/* Username */}
                                     <div>
@@ -357,7 +357,7 @@ function Login() {
                                         Create Account
                                     </button>
 
-                                </div>
+                                </form>
 
                                 {/* Back to Login */}
                                 <p className="text-center text-sm text-gray-500 mt-6">
