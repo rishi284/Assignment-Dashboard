@@ -1,9 +1,7 @@
-
 import { Routes, Route, Navigate } from 'react-router'
-import './App.css'
-import Login from './Components/Login'
-import StudentDashboard from './Components/StudentPortal'
-import AdminDashboard from './Components/AdminPortal'
+import Login from './Frontend/LoginFolder/Login'
+import StudentDashboard from './Frontend/StudentPortal'
+import AdminDashboard from './Frontend/AdminPortal'
 import { Toaster } from 'react-hot-toast'
 
 function App() {

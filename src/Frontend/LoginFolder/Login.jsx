@@ -1,15 +1,17 @@
 import { useState } from 'react'
-import loginIllustration from '../assets/login.png'
+import loginIllustration from '../../assets/login.png'
 import { useNavigate } from 'react-router'
 import toast from 'react-hot-toast'
 
 function Login() {
+
     const [role, setRole] = useState('Student')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+
     const navigate = useNavigate()
 
-
+    // Handle login
     const handleLogin = () => {
 
         const enteredEmail = email.trim().toLowerCase()
@@ -26,105 +28,61 @@ function Login() {
             return
         }
 
-        if (enteredEmail.length < 4) {
-            toast.error('Email must contain at least 4 characters')
+        // Get registered users
+        const users = JSON.parse(
+            localStorage.getItem('users') || '[]'
+        )
+
+        // Find user using email or username
+        const existingUser = users.find(
+            (user) =>
+                user.email.toLowerCase() === enteredEmail ||
+                user.username.toLowerCase() === enteredEmail
+        )
+
+        // Check whether user exists
+        if (!existingUser) {
+            toast.error('Account does not exist. Please sign up.')
             return
         }
 
-        if (enteredPassword.length < 4) {
-            toast.error('Password must contain at least 4 characters')
+        // Validate role
+        if (existingUser.role !== role) {
+            toast.error('Please select the correct role')
             return
         }
 
-        // Get existing users from localStorage
-        const students = JSON.parse(
-            localStorage.getItem('students') || '[]'
-        )
-
-        const admins = JSON.parse(
-            localStorage.getItem('admins') || '[]'
-        )
-
-        // Find user in both collections
-        const existingUser = [...students, ...admins].find(
-            (user) => user.email.toLowerCase() === enteredEmail
-        )
-
-        let currentUser
-
-        if (existingUser) {
-
-            // Check selected role
-            if (existingUser.role !== role) {
-                toast.error('Please select the correct role')
-                return
-            }
-
-            // Check password
-            if (existingUser.password !== enteredPassword) {
-                toast.error('Incorrect password')
-                return
-            }
-
-            currentUser = existingUser
-
-            toast.success('Login successful!')
-
-        }
-        else {
-
-            // Create new user
-            const newUser = {
-                id: `${role.toLowerCase()}_${Date.now()}`,
-                name: enteredEmail.split('@')[0],
-                email: enteredEmail,
-                password: enteredPassword,
-                role: role
-            }
-
-            // Save user according to selected role
-            if (role === 'Admin') {
-
-                admins.push(newUser)
-
-                localStorage.setItem(
-                    'admins',
-                    JSON.stringify(admins)
-                )
-
-            }
-            else {
-
-                students.push(newUser)
-
-                localStorage.setItem(
-                    'students',
-                    JSON.stringify(students)
-                )
-
-            }
-
-            currentUser = newUser
-
-            toast.success(`${role} account created!`)
-
+        // Validate password
+        if (existingUser.password !== enteredPassword) {
+            toast.error('Incorrect password')
+            return
         }
 
-        // Store logged-in user
+        // Generate simulated authentication token
+        const simulatedToken = `joineazy_${existingUser.id}_${Date.now()}`
+
+        // Store logged-in user details
         const loggedInUser = {
-            id: currentUser.id,
-            name: currentUser.name,
-            email: currentUser.email,
-            role: currentUser.role
+            id: existingUser.id,
+            username: existingUser.username,
+            email: existingUser.email,
+            role: existingUser.role
         }
 
-        sessionStorage.setItem(
+        localStorage.setItem(
             'currentUser',
             JSON.stringify(loggedInUser)
         )
 
+        localStorage.setItem(
+            'authToken',
+            simulatedToken
+        )
+
+        toast.success('Login successful!')
+
         // Navigate according to role
-        if (currentUser.role === 'Student') {
+        if (existingUser.role === 'Student') {
             navigate('/student-dashboard')
         }
         else {
@@ -133,6 +91,7 @@ function Login() {
     }
 
     return (
+
         <div className="relative min-h-screen overflow-hidden bg-linear-to-br from-[#9267e3] to-[#794cc2] flex items-center justify-center p-4 sm:p-6">
 
             {/* Main login card */}
@@ -154,19 +113,28 @@ function Login() {
 
                     <div className="w-full max-w-md mx-auto">
 
+                        {/* Heading */}
+                        <h1 className="text-3xl font-semibold text-zinc-800">
+                            Welcome Back!
+                        </h1>
 
+                        <p className="text-sm text-zinc-400 mt-2 mb-7">
+                            Login to continue to Joineazy.
+                        </p>
 
                         {/* Role selection */}
                         <div className="mb-7">
+
                             <label className="text-2xl font-medium">
                                 Login as
                             </label>
 
-                            <div className="flex gap-3 mt-3 *:cursor-pointer">
+                            <div className="flex gap-3 mt-3">
 
                                 <button
+                                    type="button"
                                     onClick={() => setRole('Student')}
-                                    className={`flex-1 py-3 rounded-lg border text-md transition-all duration-300 font-medium 
+                                    className={`flex-1 py-3 rounded-lg border text-md transition-all duration-300 font-medium
                                         ${role === 'Student'
                                             ? 'bg-[#7938EB] text-white border-[#7938EB]'
                                             : 'border-zinc-300 text-zinc-500 hover:bg-purple-200'
@@ -176,36 +144,41 @@ function Login() {
                                 </button>
 
                                 <button
-                                    onClick={() => setRole('Admin')}
+                                    type="button"
+                                    onClick={() => setRole('Professor')}
                                     className={`flex-1 py-3 rounded-lg border text-md transition-all duration-300 font-medium
-                                        ${role === 'Admin'
+                                        ${role === 'Professor'
                                             ? 'bg-[#7938EB] text-white border-[#7938EB]'
                                             : 'border-zinc-300 text-zinc-500 hover:bg-purple-200'
                                         }`}
                                 >
-                                    Admin
+                                    Professor
                                 </button>
 
                             </div>
+
                         </div>
 
-                        {/* Email */}
+                        {/* Email or Username */}
                         <div className="my-5">
+
                             <label className="text-sm font-medium text-gray-700">
                                 Email or Username
                             </label>
 
                             <input
-                                type="email"
+                                type="text"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 placeholder="Enter your email or username"
                                 className="w-full mt-2 px-4 py-3 border border-gray-300 rounded-md outline-none focus:border-[#7938EB] text-sm"
                             />
+
                         </div>
 
                         {/* Password */}
                         <div className="my-4">
+
                             <label className="text-sm font-medium text-gray-700">
                                 Password
                             </label>
@@ -217,12 +190,7 @@ function Login() {
                                 placeholder="Enter your password"
                                 className="w-full mt-2 px-4 py-3 border border-gray-300 rounded-md outline-none focus:border-[#7938EB] text-sm"
                             />
-                        </div>
 
-                        <div className="text-right mb-7 *:cursor-pointer">
-                            <button className="text-sm text-[#7938EB] hover:underline">
-                                Forgot password?
-                            </button>
                         </div>
 
                         {/* Login button */}
@@ -234,14 +202,31 @@ function Login() {
                             Login
                         </button>
 
+                        {/* Signup navigation */}
+                        <p className="text-center text-sm text-gray-500 mt-7">
+
+                            Don't have an account?
+
+                            <button
+                                type="button"
+                                onClick={() => navigate('/signup')}
+                                className="text-[#7938EB] font-semibold ml-1 hover:underline"
+                            >
+                                Sign up
+                            </button>
+
+                        </p>
+
                         <p className="text-center text-xs text-gray-400 mt-8">
                             © 2026 Joineazy. All rights reserved.
                         </p>
 
                     </div>
+
                 </div>
 
             </div>
+
         </div>
     )
 }
