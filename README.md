@@ -1,186 +1,122 @@
-# Joineazy – Assignment & Review Dashboard
+Joineazy – Student, Group & Assignment Management
+Joineazy is a role-based web application for managing courses, assignments, student groups, and assignment acknowledgments. It provides separate dashboards for Professors and Students.
+- Live Demo: https://assignment-dashboard-ruddy.vercel.app/login
+- GitHub Repository: https://github.com/rishi284/Assignment-Dashboard
+Demo note: This version uses browser localStorage as its data store. Demo accounts and their data are saved in the browser where they are created. They are not shared automatically between different browsers, devices, or local and deployed versions.
 
-Joineazy is a responsive assignment-management dashboard with separate experiences for **Students** and **Admins (Professors)**. Admins can create, edit, and delete assignments, while students can view their assigned work, confirm submissions, and track their progress.
-
-## Live Demo
-
-- **Live application:** https://assignment-dashboard-ruddy.vercel.app
-- **GitHub repository:** https://github.com/rishi284/Assignment-Dashboard
-- **Demo video:** Add your Loom or Google Drive link here after recording. Set Google Drive access to **Anyone with the link – Viewer**.
-
-## Features
-
-### Student
-
-- Register and log in with the Student role.
-- View assignments made available to all registered students.
-- Read assignment descriptions and due dates.
-- Open the assignment's Google Drive link.
-- Confirm an assignment submission through a confirmation dialog.
-- View submitted and pending counts, overall completion percentage, and progress.
-
-### Admin
-
-- Register and log in with the Admin role.
-- View assignments created by the logged-in admin.
-- Create assignments with a title, description, due date, and Google Drive link.
-- Make assignments available to all registered students.
-- Edit existing assignments.
-- Delete assignments through a confirmation modal.
-- View total assignments, student count, pending submissions, and class completion progress.
-
-## Tech Stack
-
-- **React** – Component-based user interface.
-- **Vite** – Development server and production build tooling.
-- **JavaScript** – Application logic.
-- **Tailwind CSS** – Responsive styling.
-- **React Router** – Client-side navigation.
-- **React Hot Toast** – Success and error notifications.
-- **Browser localStorage** – Stores demo accounts, assignments, and submissions.
-- **Browser sessionStorage** – Stores the current user's login session.
-- **Vercel** – Frontend deployment.
-
-## Getting Started
-
-### Prerequisites
-
-Install Node.js and npm. Git is useful if you want to clone the repository.
-
-### 1. Clone the repository
-
-```bash
-git clone https://github.com/rishi284/Assignment-Dashboard.git
-```
-
-### 2. Open the project folder
-
-```bash
-cd Assignment-Dashboard
-```
-
-### 3. Install dependencies
-
-```bash
-npm install
-```
-
-### 4. Start the development server
-
-```bash
-npm run dev
-```
-
-Open the local URL printed in the terminal (Vite commonly uses `http://localhost:5173`).
-
-### 5. Create a production build
-
-```bash
+Features
+Authentication
+- Student and Professor registration and login.
+- Form validation for required fields, duplicate usernames/emails, password length, and password confirmation.
+- Role-based navigation to the appropriate dashboard.
+- Simulated login session using localStorage.
+- Logout clears the current session.
+Professor Dashboard
+- View course, assignment, and pending-submission summaries.
+- Create courses with a name, course code, and description.
+- Create and edit assignments with a title, description, deadline, OneDrive link, and submission type.
+- Delete assignments with a confirmation step.
+- Track submission acknowledgments and view submitted and pending students or groups.
+Student Dashboard
+- View available courses and assignment progress.
+- View assignment descriptions, deadlines, and OneDrive links.
+- Acknowledge individual assignment submissions and see the acknowledgment date and time.
+- Create a group or join an existing group within a course.
+- View group details, including the leader and members.
+- For group assignments, only the group leader can acknowledge submission. Other group members can see who acknowledged it and when.
+- View overdue and pending assignment statuses.
+Design Choices
+- Separate role-based dashboards: Professors and Students have different workflows, so each role has its own dashboard and relevant actions.
+- Reusable, focused components: The dashboards are divided into components for overviews, assignments, and group management. This keeps the UI easier to maintain.
+- Purple-and-white visual theme: Purple is used for primary actions and progress indicators, with neutral backgrounds and status colours to make information easy to scan.
+- Responsive layout: Tailwind CSS utility classes are used to adapt the interface to different screen sizes.
+- Confirmation before important actions: Assignment deletion and submission acknowledgment use confirmation steps to reduce accidental actions.
+- Local browser storage for this version: localStorage is used to persist demo users, courses, assignments, groups, and acknowledgments without requiring a backend service.
+Technology Stack
+- React
+- Vite
+- JavaScript
+- Tailwind CSS
+- React Router
+- React Hot Toast
+- Browser localStorage
+- Vercel for deployment
+Getting Started
+Prerequisites
+Install the following before running the project:
+- Node.js (with npm)
+- Git
+Run locally
+1. Clone the repository:
+   git clone https://github.com/rishi284/Assignment-Dashboard.git
+2. Open the project folder that contains package.json:
+   cd Assignment-Dashboard
+   If the frontend is inside a frontend subfolder in your checkout, run cd frontend before continuing.
+3. Install dependencies:
+   npm install
+4. Start the development server:
+   npm run dev
+5. Open the local URL printed in the terminal (Vite commonly uses http://localhost:5173).
+Production build
+To create a production build:
 npm run build
-```
-
-Vite writes the production build to the `dist/` directory.
-
-## Project Structure
-
-The main project structure is shown below. If files have been moved or renamed during development, update this tree to match the current repository.
-
-```text
-Assignment-Dashboard/
-├── public/                 # Static public assets
-├── src/
-│   ├── assets/              # Images used by the application (for example, login.png)
-│   ├── Components/          # React page and UI components
-│   │   ├── Login.jsx
-│   │   ├── AdminDashboard.jsx
-│   │   └── StudentDashboard.jsx
-│   ├── App.jsx              # Application routes
-│   ├── main.jsx             # React entry point
-│   └── index.css            # Tailwind and global styles
-├── .gitignore
-├── index.html
-├── package.json
-├── package-lock.json
-├── vite.config.js
-└── README.md
-```
+To preview the production build locally, when the preview script is available:
+npm run preview
+Demo Login Details
+Create the demo accounts from the registration screen, then enter the credentials below. Replace these placeholders with the actual demo credentials before submitting the repository.
+Role	Login email or username	Password
+Professor / Admin	ADD_PROFESSOR_EMAIL_OR_USERNAME	ADD_PROFESSOR_PASSWORD
+Student	ADD_STUDENT_EMAIL_OR_USERNAME	ADD_STUDENT_PASSWORD
 
 
-### `Login.jsx`
+Important: Create the accounts on the deployed website before recording or sharing the demo credentials. Because this project uses localStorage, the accounts are available only in the same browser profile and on the same website origin where they were created. A new browser or device will have separate data.
 
-- Lets the user select Student or Admin.
-- Validates the entered username/email and password fields.
-- Creates a new demo account when the entered username is not found in the selected role's account collection.
-- Reads and writes account records in localStorage.
-- Stores the current user's non-password profile details in sessionStorage and routes the user to the matching dashboard.
 
-### `AdminDashboard.jsx`
+Component Structure
+The main dashboard components are organized by user role. The structure below shows the key files; adjust it if your final repository uses different paths.
+src/
+├── App.jsx
+├── main.jsx
+├── assets/
+│   └── login.png
+└── Frontend/
+    ├── LoginFolder/
+    │   └── Login.jsx
+    ├── AdminDashboard/
+    │   ├── AdminPortal.jsx
+    │   ├── AdminOverview.jsx
+    │   ├── CourseAssignment.jsx
+    │   └── CourseManagment.jsx
+    └── StudentDashboard/
+        ├── StudentPortal.jsx
+        ├── StudentOverview.jsx
+        ├── StudentAssignments.jsx
+        └── StudentGroups.jsx
+Main component responsibilities
+- Login.jsx – registration, login, validation, and role-based navigation.
+- AdminPortal.jsx – professor authentication, dashboard state, course and assignment operations, and data handling.
+- AdminOverview.jsx – professor overview, statistics, and course cards.
+- CourseAssignment.jsx – assignment cards, progress, and submitted/pending details.
+- CourseManagment.jsx – course, assignment, and delete-confirmation modal components.
+- StudentPortal.jsx – student authentication, course selection, group operations, and acknowledgment handling.
+- StudentOverview.jsx – student course cards and progress summary.
+- StudentAssignments.jsx – assignment details, deadlines, and acknowledgment interface.
+- StudentGroups.jsx – group information and create/join interface.
+Data Storage and Limitations
+This demo stores application data in the browser's localStorage. The main data keys used by the application include:
+- users
+- currentUser
+- authToken
+- courses
+- assignments
+- groups
+- submissions
+This is suitable for demonstrating the interface and workflows, but it is not a production authentication or shared database solution. The simulated token and client-side passwords are not secure authentication. Data is local to each browser profile and can be cleared by the user or browser. A production deployment should use a backend, database, and secure authentication service.
+Deployment
+The application is deployed on Vercel:
 
-- Reads the account, assignment, and submission collections from localStorage.
-- Displays only assignments created by the logged-in admin.
-- Creates, edits, and deletes assignments.
-- Removes submission records related to an assignment when that assignment is deleted.
-- Calculates pending submissions and per-assignment class completion.
+https://assignment-dashboard-ruddy.vercel.app/login
 
-### `StudentDashboard.jsx`
-
-- Reads assignments and submission records from localStorage.
-- Shows assignments available to all students.
-- Finds the current student's submission for each assignment and displays its Pending or Submitted status.
-- Saves a submission after the student confirms the action.
-- Calculates the student's submitted count, pending count, and overall progress.
-
-### `App.jsx` and `main.jsx`
-
-- `App.jsx` defines the routes for login, Student Dashboard, and Admin Dashboard.
-- `main.jsx` mounts the React application and its router.
-
-## Data Storage and Design Decisions
-
-### Browser storage
-
-The project uses browser storage instead of a backend API so the assignment workflow can be demonstrated without a server:
-
-| Storage key | Purpose |
-|---|---|
-| `students` | Registered Student demo accounts |
-| `admins` | Registered Admin demo accounts |
-| `assignments` | Assignments created by Admins |
-| `submissions` | Student submission records |
-| `currentUser` in `sessionStorage` | Current login session |
-
-### Role-specific dashboards
-
-Students and Admins have separate dashboards so each role sees the actions and information relevant to them.
-
-### Assignment workflow
-
-Assignments created by an Admin are assigned to all registered students. Students confirm their submission through a two-step interaction. Admin statistics are calculated from the assignment and submission records.
-
-### Responsive interface
-
-Tailwind CSS responsive utilities are used to adapt the dashboard layout to desktop, tablet, and mobile screen sizes.
-
-## Important Limitations
-
-- **Browser-specific data:** localStorage belongs to a particular browser profile and website origin. Data created on a laptop will not automatically appear on a phone or in another browser profile.
-- **Local persistence:** data generally remains after refreshes, but it can be removed when browser/site data is cleared.
-- **Demo authentication only:** account records and passwords are stored in browser storage. This is a frontend demonstration and is **not suitable for production authentication or sensitive information**.
-- **No shared backend:** the application does not synchronize data between users or devices.
-
-## Demo Walkthrough
-
-In the demo video, show both roles:
-
-1. Log in or register as an Admin.
-2. Create an assignment and show it on the Admin Dashboard.
-3. Log out and log in or register as a Student in the same browser profile.
-4. Open the assignment and confirm its submission.
-5. Return to the Admin Dashboard and show the updated submission progress.
-6. Demonstrate editing and deleting an assignment if time permits.
-
-## Author
-
-**Rishi Sai Karthikeya**
-
-Frontend project built as an assignment-management dashboard demonstration.
+For the latest deployment, check that the Vercel deployment corresponds to the latest pushed GitHub commit.
+Author
+Joineazy project – Student, Group & Assignment Management System.
